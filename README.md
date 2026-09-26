@@ -82,7 +82,7 @@ Every argument is cited. No precedent is invented. If no case law matches, the a
 
 ### User Flow
 
-1. User opens Vivaha in the browser (HuggingFace Spaces)
+1. User opens Vivaha in the browser (Streamlit Link)
 2. User types a question or uploads a document (PDF / DOCX / TXT)
 3. Orchestrator classifies intent and routes to appropriate agent(s)
 4. Agent retrieves grounded legal context via hybrid RAG

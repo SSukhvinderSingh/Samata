@@ -72,36 +72,35 @@ def run_qa_agent(
     slm_brief = ""
     citations = []
 
-    if not rag_context or rag_context[0].get("reranker_score", 0.0) < 0.55:
-        answer = (
-            "I could not find a sufficiently close legal provision in the corpus for this specific query. "
-            "Under Indian matrimonial law, statutory provisions often require factual evaluation by a Family Court advocate."
-        )
+    # Execute 2-tier generation with conversation history and retrieved context
+    llm_response, slm_brief = run_two_tier_rag_generation(
+        system_prompt=SYSTEM_PROMPT,
+        user_query=user_question,
+        rag_context=rag_context,
+        slm_model=slm_model,
+        main_model=main_model,
+        document_context=document_context,
+        chat_history=chat_history
+    )
+    
+    if llm_response:
+        answer = llm_response
+    elif rag_context:
+        # Deterministic, well-structured fallback
+        answer = format_grounded_fallback(rag_context)
     else:
-        # Execute 2-tier generation
-        llm_response, slm_brief = run_two_tier_rag_generation(
-            system_prompt=SYSTEM_PROMPT,
-            user_query=user_question,
-            rag_context=rag_context,
-            slm_model=slm_model,
-            main_model=main_model,
-            document_context=document_context,
-            chat_history=chat_history
+        answer = (
+            "I could not locate specific statutory provisions matching your query. "
+            "For tailored guidance on your matrimonial matter, please consult a qualified legal practitioner."
         )
-        
-        if llm_response:
-            answer = llm_response
-        else:
-            # Deterministic, well-structured fallback
-            answer = format_grounded_fallback(rag_context)
 
-        for c in rag_context[:3]:
-            heading = c.get("section_heading", "Statutory Provision")
-            citations.append({
-                "section": heading,
-                "excerpt": c.get("chunk_text", "")[:180] + "...",
-                "score": round(c.get("reranker_score", c.get("score", 0.0)), 2)
-            })
+    for c in (rag_context or [])[:3]:
+        heading = c.get("section_heading", "Statutory Provision")
+        citations.append({
+            "section": heading,
+            "excerpt": c.get("chunk_text", "")[:180] + "...",
+            "score": round(c.get("reranker_score", c.get("score", 0.0)), 2)
+        })
 
     disclaimer = get_disclaimer("standard")
 

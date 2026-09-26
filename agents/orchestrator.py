@@ -173,8 +173,16 @@ def orchestrate_query(
         }
 
     # 4. RAG Retrieval — base 13k legal corpus + any uploaded document chunks
+    retrieval_query = effective_message
+    if chat_history and len(effective_message.split()) <= 12:
+        # Contextual follow-up query expansion using previous user query context
+        prev_user_queries = [m.get("content", "") for m in chat_history if m.get("role") == "user"]
+        if prev_user_queries:
+            # Combine last turn context with the follow-up question for accurate statute retrieval
+            retrieval_query = f"{prev_user_queries[-1]} {effective_message}"
+
     rag_res = retrieve_chunks(
-        effective_message,
+        retrieval_query,
         top_k=5,
         document_context_chunks=document_chunks or None
     )
@@ -183,7 +191,7 @@ def orchestrate_query(
 
     if rag_res["crag_trigger"]:
         crag_triggered = True
-        crag_res = execute_crag_fallback(effective_message, top_score)
+        crag_res = execute_crag_fallback(retrieval_query, top_score)
         retrieved_chunks = crag_res["secondary_chunks"]
         top_score = crag_res["secondary_top_score"]
 

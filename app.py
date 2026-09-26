@@ -270,6 +270,50 @@ if "view" not in st.session_state:
 if "selected_agents" not in st.session_state:
     st.session_state["selected_agents"] = []
 
+# ==============================================================================
+# SIDEBAR: ACCESSIBILITY & CHAMBERS NAVIGATION
+# ==============================================================================
+with st.sidebar:
+    st.markdown("### ⚖️ **Samata Chambers**")
+    st.caption("AI-Powered Matrimonial Legal Intelligence")
+    
+    st.markdown("---")
+    st.markdown("#### ♿ **Accessibility (a11y) Tools**")
+    font_size = st.select_slider(
+        "Text Sizing",
+        options=["Normal", "Large", "Extra Large"],
+        value="Normal",
+        help="Adjust font sizing across the courtroom interface for enhanced readability (WCAG 2.1 AA)"
+    )
+    if font_size == "Large":
+        st.markdown("<style>html, body, p, [class*='css'], .stMarkdown { font-size: 1.10rem !important; }</style>", unsafe_allow_html=True)
+    elif font_size == "Extra Large":
+        st.markdown("<style>html, body, p, [class*='css'], .stMarkdown { font-size: 1.22rem !important; }</style>", unsafe_allow_html=True)
+    
+    high_contrast = st.toggle("High Contrast Focus Rings", value=True, help="Enhances visibility of active controls and keyboard focus")
+    if high_contrast:
+        st.markdown("<style>button:focus, input:focus, textarea:focus { outline: 3px solid #06b6d4 !important; outline-offset: 2px !important; }</style>", unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown("#### 🏛️ **Statutory Coverage**")
+    st.markdown("""
+    - **HMA 1955**: Hindu Marriage Act
+    - **SMA 1954**: Special Marriage Act
+    - **DV Act 2005**: Protection of Women
+    - **CrPC 125 / BNSS**: Maintenance
+    """)
+
+    st.markdown("---")
+    st.markdown("#### 🚨 **Emergency Helplines**")
+    st.markdown("""
+    - **NCW Helpline**: `7827170170`
+    - **iCall Distress**: `9152987821`
+    - **SNEHI Support**: `011-65978181`
+    """)
+
+    st.markdown("---")
+    st.caption(f"⚡ **SLM**: `{ACTIVE_SLM.split('/')[-1]}`  \n🧠 **LLM**: `{ACTIVE_MAIN.split('/')[-1]}`")
+
 
 def get_agent_badge_html(agent_name: str) -> str:
     """Returns a styled theme-adaptive badge HTML for the given agent."""

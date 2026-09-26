@@ -9,6 +9,9 @@ progress.md
 data_sources.md
 dependencies.md
 masterskills-index.md
+Subvid_Docs/
+*.mp4
+*.mp3
 
 # ─── Environment & Secrets (MUST NEVER BE COMMITTED) ───────────────────────
 .env

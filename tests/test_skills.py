@@ -79,3 +79,14 @@ def test_rag_pipeline_and_crag():
 
     crag_res = execute_crag_fallback("unclear query", 0.40)
     assert crag_res["crag_status"] in ["resolved", "unresolved"]
+
+
+def test_security_sanitization():
+    from skills.llm_client import sanitize_legal_narrative
+    raw_prompt_tags = "Here is the brief: <slm_legal_research_brief>Section 13</slm_legal_research_brief> <verified_corpus_excerpts>HMA_1955.pdf</verified_corpus_excerpts>"
+    sanitized = sanitize_legal_narrative(raw_prompt_tags)
+    assert "<slm_legal_research_brief>" not in sanitized
+    assert "<verified_corpus_excerpts>" not in sanitized
+    assert "HMA_1955.pdf" not in sanitized
+    assert "Hindu Marriage Act, 1955" in sanitized
+

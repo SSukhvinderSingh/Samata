@@ -1,0 +1,97 @@
+# Samata — .gitignore
+# Project: Samata — AI-Powered Matrimonial Legal Assistant
+
+# ─── MasterSkills & Dev Specs (MUST NEVER BE COMMITTED) ───────────────────────
+MasterSkills/
+agents.md
+skills.md
+progress.md
+data_sources.md
+dependencies.md
+masterskills-index.md
+
+# ─── Environment & Secrets (MUST NEVER BE COMMITTED) ───────────────────────
+.env
+.env.local
+.env.production
+*.key
+*.pem
+secrets/
+
+# ─── Corpus & Data (may exceed 10 MB repo limit) ───────────────────────────
+data/corpus/statutes/
+data/corpus/cases/
+data/corpus/synthetic/
+data/index/
+# Keep sample directory for evaluator demo:
+# data/corpus/sample/ — NOT gitignored
+
+# ─── Runtime Files ─────────────────────────────────────────────────────────
+feedback_log.jsonl
+sessions/
+*.session.json
+
+# ─── Python ────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.pyc
+
+# ─── Virtual Environments ──────────────────────────────────────────────────
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+
+# ─── HuggingFace / Model Cache ─────────────────────────────────────────────
+.cache/
+models/
+*.bin
+*.safetensors
+# Note: sentence-transformers models are downloaded at runtime, not committed
+
+# ─── Pytest / Test Artifacts ───────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+test-results/
+*.log
+
+# ─── IDE ───────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Jupyter ───────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ─── Streamlit ─────────────────────────────────────────────────────────────
+.streamlit/secrets.toml
+# Note: .streamlit/config.toml CAN be committed (no secrets)
